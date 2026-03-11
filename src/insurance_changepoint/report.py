@@ -19,7 +19,7 @@ Usage
 from __future__ import annotations
 
 import json
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -270,7 +270,7 @@ class ConsumerDutyReport:
         return {
             "product": self.product,
             "segment": self.segment,
-            "generated_at": datetime.utcnow().isoformat() + "Z",
+            "generated_at": datetime.now(timezone.utc).isoformat(),
             "recommendation": self._recommendation(),
             "detected_breaks": self._detected_breaks_dicts(),
             "uk_events": self.uk_events,
@@ -336,7 +336,7 @@ class ConsumerDutyReport:
         return breaks
 
     def _build_context(self) -> dict[str, Any]:
-        generated_at = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+        generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
         # Periods
         if isinstance(self.result, MonitorResult):
